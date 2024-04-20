@@ -158,6 +158,7 @@ impl Renderer {
         // Look at elements. Try just looking in the first one for 'up'.
 
         let els = &model.elements.ok_or_else(|| {
+			println!("&model.elements.ok_or_else");
             Error::MissingElements(
                 id.to_owned(),
                 encoded_props.to_owned(),
@@ -166,6 +167,7 @@ impl Renderer {
         })?;
 
         let el = els.get(0).ok_or_else(|| {
+			println!("els.get(0).ok_or_else");
             Error::MissingElements(
                 id.to_owned(),
                 encoded_props.to_owned(),
@@ -174,6 +176,7 @@ impl Renderer {
         })?;
 
         let face = el.faces.get("up").ok_or_else(|| {
+			println!("el.faces.get(\"up\").ok_or_else");
             Error::MissingElements(
                 id.to_owned(),
                 encoded_props.to_owned(),

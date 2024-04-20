@@ -166,13 +166,14 @@ pub fn make_palette(mc_jar_path: &Path) -> Result<()> {
     let textures = load_textures(&assets.join("textures").join("block"))?;
     let blockstates = load_blockstates(&assets.join("blockstates"))?;
     let models = load_models(&assets.join("models").join("block"))?;
-
+	// Display blockstates
+	println!("Original blockstates: {:?}", blockstates);
     let mut renderer = Renderer::new(blockstates.clone(), models, textures.clone());
     let mut failed = 0;
     let mut mapped = 0;
     let mut success = 0;
 
-    let mappings = vec![
+    let mappings: Vec<RegexMapping> = vec![
         RegexMapping {
             blockstate: Regex::new(r"minecraft:(.+)_fence").unwrap(),
             texture_template: "minecraft:block/$1_planks",
@@ -301,6 +302,74 @@ pub fn make_palette(mc_jar_path: &Path) -> Result<()> {
             blockstate: Regex::new(r"minecraft:fire").unwrap(),
             texture_template: "minecraft:block/fire_0",
         },
+    //"pink_petals": 49044,
+    //"pointed_dripstone": 836,
+    //"chest": 77,
+    //"white_bed": 55,
+    //"attached_pumpkin_stem": 49,
+    //"scaffolding": 35,
+    //"deepslate_tile_wall": 34,
+    //"cave_vines_plant": 31,
+    //"hopper": 30,
+    //"redstone_wire": 29,
+    //"composter": 28,
+    //"light_blue_bed": 28,
+    //"glow_lichen": 15,
+    //"grindstone": 15,
+    //"powered_rail": 14,
+    //"chorus_plant": 14,
+    //"cave_vines": 12,
+    //"shulker_box": 8,
+    //"attached_melon_stem": 8,
+    //"comparator": 5,
+    //"lever": 5,
+    //"brewing_stand": 4,
+    //"dispenser": 4,
+    //"stone_brick_wall": 4,
+    //"oak_sign": 4,
+    //"pink_bed": 4,
+    //"repeater": 3,
+    //"orange_bed": 3,
+    //"dropper": 3,
+    //"lightning_rod": 2,
+    //"campfire": 2,
+    //"red_bed": 2,
+    //"observer": 2,
+    //"ladder": 2,
+    //"big_dripleaf_stem": 2,
+    //"blue_bed": 2,
+    //"yellow_bed": 2,
+    //"blue_shulker_box": 1,
+    //"ender_chest": 1,
+    //"lime_shulker_box": 1,
+    //"red_shulker_box": 1,
+    //"white_shulker_box": 1,
+    //"dragon_wall_head": 1,
+    //"green_shulker_box": 1,
+    //"bamboo_button": 1,
+    //"sculk_sensor": 1,
+    //"calibrated_sculk_sensor": 1,
+    //"iron_bars": 1,
+    //"dark_oak_door": 1,
+    //"oak_door": 1,
+    //"small_dripleaf": 1,
+    //"mossy_stone_brick_wall": 1
+		RegexMapping {
+			blockstate: Regex::new(r"minecraft:pink_petals").unwrap(),
+			texture_template: "minecraft:block/pink_petals",
+		},
+		RegexMapping {
+			blockstate: Regex::new(r"minecraft:pointed_dripstone").unwrap(),
+			texture_template: "minecraft:block/pointed_dripstone_down_base",
+		},
+		RegexMapping {
+			blockstate: Regex::new(r"minecraft:attached_pumpkin_stem").unwrap(),
+			texture_template: "minecraft:block/pumpkin_stem",
+		},
+		RegexMapping {
+			blockstate: Regex::new(r"minecraft:scaffolding").unwrap(),
+			texture_template: "minecraft:block/scaffolding_top",
+		},
     ];
 
     let mut palette = HashMap::new();
@@ -354,11 +423,13 @@ pub fn make_palette(mc_jar_path: &Path) -> Result<()> {
                             palette.insert(description, col);
                             success += 1;
                         }
-                        Err(_) => {
+                        Err(error) => {
                             if let Some(c) = try_mappings((*name).clone()) {
                                 palette.insert((*name).clone(), c);
                                 eprintln!("mapped {}", *name);
-                            }
+                            } else {
+								eprintln!("failed to render {}: {:?}", *name, error);
+							}
                         }
                     };
                 }

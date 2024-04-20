@@ -300,10 +300,21 @@ fn top_shade_colour(colour: Rgba, height: isize, shade_height: isize) -> Rgba {
         Ordering::Equal => 220,
         Ordering::Greater => 255,
     };
+	let v = height + 32768;
     [
-        (colour[0] as usize * shade / 255) as u8,
-        (colour[1] as usize * shade / 255) as u8,
-        (colour[2] as usize * shade / 255) as u8,
-        colour[3],
+        //(colour[0] as usize * shade / 255) as u8,
+        //(colour[1] as usize * shade / 255) as u8,
+        //(colour[2] as usize * shade / 255) as u8,
+        //colour[3],
+
+		//v += 32768
+		//r = floor(v/256)
+		//g = floor(v % 256)
+		//b = floor((v - floor(v)) * 256)
+		
+		(v / 256) as u8,
+		(v % 256) as u8,
+		0,
+		255,
     ]
 }
